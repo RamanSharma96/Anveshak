@@ -16,7 +16,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import javax.sql.*;
 
-import com.Handler.ClientHandler;
+//import com.Handler.ClientHandler;
 
 
 
@@ -67,41 +67,16 @@ public class ServerSocketListener implements ServletContextListener {
 		//DATABASE CODE
 		con = dataSource.getConnection();
 		
-		
-		
-		//SOCKET CODE
-		
-		 ServerSocket ss = new ServerSocket(Integer.parseInt(sc.getInitParameter("port")));
+		Server s=new Server(sc,con);
+
+        // Create a new Thread with this object.
+         Thread t = new Thread(s);
          
-	     Socket s;
-	  
-	        // running infinite loop for getting
-	        // client request
-	        while (true) 
-	        {
-	            // Accept the incoming request
-	            s = ss.accept();
-	 
-	            System.out.println("New client request received : " + s);
-	             
-	            // obtain input and output streams
-	            DataInputStream dis = new DataInputStream(s.getInputStream());
-	            DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-	             
-	            System.out.println("Creating a new handler for this client...");
-	 
-	            // Create a new handler object for handling this request.
-	            ClientHandler mtch = new ClientHandler(s,dis, dos,con);
-	 
-	            // Create a new Thread with this object.
-	            Thread t = new Thread(mtch);
-	             
-	 
-	            // start the thread.
-	            t.start();
-	 
-	 
-	        }
+
+        // start the thread.
+        t.start();
+		
+		
 		}catch(Exception e){System.out.println(e);}  
 	}
     
