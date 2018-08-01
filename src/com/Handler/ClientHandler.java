@@ -4,21 +4,35 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.StringTokenizer;
+
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
+import DB.InsertData;
 
 public class ClientHandler extends Thread {
 
 	    DataInputStream dis;
 	    DataOutputStream dos;
 	    final Socket s;
-	     
+	    Connection con;
+	    @Resource(name = "jdbc/AnveshakDB")
+		private DataSource dataSource;
+
 	 
 	    // Constructor
-	    public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos) 
+	    public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos,Connection con) 
 	    {
 	        this.s = s;
 	        this.dis = dis;
 	        this.dos = dos;
+	        this.con=con;
 	    }
 	 
 	    @Override
@@ -31,23 +45,29 @@ public class ClientHandler extends Thread {
 	    	    String ip;
 	    	    String os;
 	    	    String mac;
+	    	    String ar[]=new String[5];
 	            boolean loop=true;
 	            while (loop) 
 	            {
 	                try
 	                {
+	                	for(int i=0;i<5;i++) {
 	                    // receive the string
 	                    received = dis.readUTF();
+	                    ar[i]=received;
+	                    System.out.println("the details are: "+received);
+	                	}
+	                    CPUusage=ar[0];
+	                    hostname=ar[1];
+	                    ip=ar[2];
+	                    os=ar[3];
+	                    mac=ar[4];
+	                    	InsertData.insertData(ar[0],ar[1],ar[2],ar[3],ar[4],con);
+	                   
 	                    
-	                    //System.out.println(received);
-	                    StringTokenizer st=new StringTokenizer(received,"\n");
-	                    while(st.hasMoreTokens())
-	                    {
-	                    	System.out.println("Token: "+st.nextToken());
-	                    }
-	                    
-	                } catch (IOException e) {
+	                } catch (Exception e) {
 	                     loop=false;
+	                     
 	                    e.printStackTrace();
 	                }
 	                 
