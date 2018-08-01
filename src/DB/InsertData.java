@@ -18,10 +18,11 @@ public class InsertData {
 	    try {
         if(conn!=null) {
         Thread.sleep(1000);
-        CallableStatement ps=conn.prepareCall("call updatedevices(?,?,?) ");
-		ps.setString(1, mac);
-		ps.setString(2, os);
-		ps.setString(3, ip);
+        CallableStatement ps=conn.prepareCall("call updatedevices(?,?,?,?) ");
+		ps.setString(1, hostname);
+		ps.setString(2, ip);
+		ps.setString(3, mac);
+		ps.setString(4,os);
 	    ps.executeUpdate();
 	    int s=ps.executeUpdate();
         //System.out.println(s+" ROWS inserted!!!!");
