@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Bar Chart</title>
+    <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"> -->   
+    <!-- <script src="js/Chart.js"></script> -->
+    <script src="jquery-3.3.1.min.js"></script>
+</head>
+<body>
+
+    <div style="width:50%;">
+        <canvas id="canvas_bar"></canvas>
+    </div>
+
+    <div class="dataset">
+        <table>
+            <tr>
+                <th>Year</th>
+                <th>Income</th>
+                <th>Expenditure</th>
+                <th>Profit/Loss</th>
+            </tr>
+            <tr>
+                <td>2012</td>
+                <td>10000</td>
+                <td>5000</td>
+                <td>5000</td>
+            </tr>
+            <tr>
+                <td>2013</td>
+                <td>11500</td>
+                <td>7500</td>
+                <td>4000</td>
+            </tr>
+            <tr>
+                <td>2014</td>
+                <td>9800</td>
+                <td>4700</td>
+                <td>5100</td>
+            </tr>
+        </table>
+    </div>
+    <script type="text/javascript">
+        function generateLabelsFromTable()
+        {                       
+            var labels = [];
+            var rows = jQuery("tr");
+            rows.each(function(index){
+            if (index != 0)  // we dont need first row of table
+            {
+                var cols = $(this).find("td");      
+                labels.push(cols.first().text());                           
+            }
+        });
+            return labels;
+        }
+        function generateDataSetsFromTable()
+        {
+            var data;
+            var datasets = [];
+            var rows = jQuery("tr");
+            rows.each(function(index){
+                if (index != 0) // we dont need first row of table
+                {
+                    var cols = $(this).find("td");  
+                    var data = [];
+                    cols.each(function(innerIndex){
+                        if (innerIndex!=0) // we dont need first columns of the row                 
+                            data.push($(this).text());                                          
+                    });
+
+
+                var dataset = 
+                {
+                    fillColor : colors[index%3].fillColor,
+                    strokeColor : colors[index%3].strokeColor,
+                    highlightFill: colors[index%3].highlightFill,
+                    highlightStroke: colors[index%3].highlightStroke,
+                    data : data
+                }
+
+                datasets.push(dataset);
+
+                }
+            });
+            return datasets;
+        }
+        var colors = [];
+        colors.push(                        
+        {
+                fillColor : "rgba(95,137,250,0.5)",
+                strokeColor : "rgba(95,137,250,0.9)",
+                highlightFill: "rgba(95,137,250,0.75)",
+                highlightStroke: "rgba(95,137,250,1)"
+        });
+        colors.push(                        
+        {
+                fillColor : "rgba(245,75,75,0.5)",
+                strokeColor : "rgba(245,75,75,0.8)",
+                highlightFill : "rgba(245,75,75,0.75)",
+                highlightStroke : "rgba(245,75,75,1)"
+        });
+        colors.push(                        
+        {
+                fillColor : "rgba(98,223,114,0.5)",
+                strokeColor : "rgba(98,223,114,0.8)",
+                highlightFill : "rgba(98,223,114,0.75)",
+                highlightStroke : "rgba(98,223,114,1)",
+        });
+
+    </script>
+
+</body>
+</html>
