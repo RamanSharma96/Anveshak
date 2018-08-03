@@ -9,12 +9,12 @@
 </head>
 <body>
    <% 
-      // String from_ip=request.getParameter("from_ip");
-   	   //String to_ip=request.getParameter("to_ip");
+       String from_ip=request.getParameter("from_ip");
+   	   String to_ip=request.getParameter("to_ip");
    	   DiscoverDevices d=new DiscoverDevices();
    	   response.setIntHeader("Refresh",5);
-   	   //String args[]={from_ip,to_ip};
-   	   d.discoverDevices();
+   	   String args[]={from_ip,to_ip};
+   	   d.discoverDevices(args);
    	   out.println("Scan in progress...");
    	   
    	 //String redirectURL = "http://localhost:8080/AnveshakTeam2/Scan.jsp";

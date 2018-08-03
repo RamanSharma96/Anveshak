@@ -18,7 +18,7 @@ public class DiscoverDevices {
 	private static Connection con;
 	private static ResultSet rs=null;
 	private static CallableStatement ps;
-	public void discoverDevices()
+	public void discoverDevices(String args[] )
 	{
 			try {
 		    /*InetAddress localhost = InetAddress.getLocalHost();
@@ -26,7 +26,6 @@ public class DiscoverDevices {
 	        System.out.println(localhost.getAddress());
 	        byte[] ip = localhost.getAddress();
 	 
-	        con=GetConnection.getConnection();
 	        /*for (int i = 1; i <= 254; i++) {
 	            ip[3] = (byte) i;
 	            InetAddress address = InetAddress.getByAddress(ip);
@@ -49,6 +48,8 @@ public class DiscoverDevices {
 	        
 	        System.out.println(localhost.getAddress());
 	        */
+	        
+	        con=GetConnection.getConnection();
 	        InetAddress firstAddress = InetAddress.getByName(firstAdd);
 	        byte[] ip = firstAddress.getAddress();
 	        int a,b,c,d,e,f,i,j;
@@ -72,6 +73,10 @@ public class DiscoverDevices {
 	                 if (address.isReachable(500)) {
 	                      System.out.println(address.getHostAddress());
 	                      System.out.println(address.getHostName());
+	                      ps=con.prepareCall("call InsertIntoDevices(?,?)");
+	  	 				  ps.setString(1,address.getHostName() );
+	  	 				  ps.setString(2, address.getHostAddress());
+	  	 				  ps.executeUpdate();
 	                 } 
 	            }
 	         }
