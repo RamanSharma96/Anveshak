@@ -1,21 +1,14 @@
 package DB;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.annotation.Resource;
-import javax.sql.*;
-
-
-public class FetchAlarms {
-	
+public class FetchDevices {
 
 	private static Connection con;
 	private static ResultSet rs=null;
-	public static ResultSet fetchAlarms()
+	public static ResultSet fetchDevices()
 	{
 		try {
 	    
@@ -25,7 +18,7 @@ public class FetchAlarms {
 		if(con==null)
 			System.out.println("NO DB CONNECTION");
 		Statement s=con.createStatement();
-		rs=s.executeQuery(" select hostname,ipaddress,time,errorid,alarmcause from alarms,devices where alarms.deviceid=devices.deviceid order by time desc;");
+		rs=s.executeQuery("select hostname,ipaddress from devices");
 		}
 		catch(Exception e) {e.printStackTrace();}
 		return rs;

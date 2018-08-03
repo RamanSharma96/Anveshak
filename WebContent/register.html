@@ -28,14 +28,26 @@
       <div class="card card-register mx-auto mt-5">
         <div class="card-header">Setting Threshold</div>
         <div class="card-body">
-          <form>
+          <form action="UpdateThreshold.jsp">
             <div class="form-group">
               <div class="form-row">
                 <div class="col-md-6">
+                  <b>CPU Usage Threshold in %</b>
                   <div class="form-label-group">
-                    <input type="text" id="firstName" class="form-control" placeholder="First name" required="required" autofocus="autofocus">
-                    <label for="firstName">Default 50</label>
-                  </div>
+                    <input type="number" id="cpu_threshold" name="cpu_threshold" class="form-control" placeholder="First name" required="required" autofocus="autofocus">
+                    <label for="firstName">Default 50%</label>
+                  </div><br/>
+                  <b>Minimum Free RAM Required in %</b>
+                  <div class="form-label-group">
+                    <input type="number" id="memory_threshold" name="memory_threshold" class="form-control" placeholder="First name" required="required" >
+                    <label for="firstName">Default 50%</label>
+                  </div><br/>
+                  <b>Minimum Free Disk Storage in GB</b>
+                  <div class="form-label-group">
+                    <input type="number" id="disk_threshold" name="disk_threshold" class="form-control" placeholder="First name" required="required" ">
+                    <label for="firstName">Default 80GB</label>
+                  </div><br/>
+                 
                 </div>
                 <!-- <div class="col-md-6">
                   <div class="form-label-group">
@@ -45,7 +57,7 @@
                 </div> -->
               </div>
             </div>
-            <a class="btn btn-primary btn-block" href="index.html">Submit</a>
+            <input type="submit" value="Update Thresholds">
           </form>
           <!-- <div class="text-center">
             <a class="d-block small mt-3" href="login.html">Login Page</a>

@@ -1,4 +1,4 @@
-<%@ page language="java" import="DB.FetchAlarms, java.sql.*" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" import="DB.FetchDevices, java.sql.*" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Alarms</title>
+    <title>Scan</title>
 
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -126,14 +126,19 @@
             <li class="breadcrumb-item">
               <a href="#">Home</a>
             </li>
-            <li class="breadcrumb-item active">Alarms</li>
+            <li class="breadcrumb-item active">Scan Network</li> 
           </ol>
-
+			<form action="ScanProcess.jsp">
+			<input type="text" name="from_ip" placeholder="From ip">
+			<input type="text" name="to_ip" placeholder="To ip">
+			<b><input type="submit" style="color:blue" value="Start Scan"/></b> 
+			</form>
+			<br/>
           <!-- DataTables Example -->
           <div class="card mb-3">
             <div class="card-header">
               <i class="fas fa-table"></i>
-               Alarms Table</div>
+               Hosts Table</div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -141,9 +146,7 @@
                     <tr>
                       <th>Hostname</th>
                       <th>IP Address</th>
-                      <th>Time</th>
-                      <th>Alarm ID</th>
-                      <th>Alarm Cause</th>
+                    
                     </tr>
                   </thead>
                   <%! ResultSet rs;
@@ -152,43 +155,23 @@
         		      int refresh_time=30;
         		  %>
                   <%
-                  response.setIntHeader("Refresh", refresh_time);
-                  int i=3;
-
-                  rs=FetchAlarms.fetchAlarms();
-                  cur_count=rs.getFetchSize();
-                  boolean new_alarm=false;
-                  if(cur_count>prev_count)
-                	  new_alarm=true;
-                  prev_count=cur_count;
+                  rs=FetchDevices.fetchDevices();
                   
-                  while(rs.next()){
-                   	if(new_alarm){
+                  response.setIntHeader("Refresh", refresh_time);
+                  while(rs.next()){    	
                    	%>
-                    <tr>
-                      <td><i style="color:red">(New)</i><a href=<%="Chart.jsp?hostname="+rs.getString(1)%>><%=rs.getString(1)%></td></a>
-                     <td><%=rs.getString(2)%></td>
-                     <td><%=rs.getString(3)%></td>
-                     <td><%=rs.getInt(4)%></td>
-                     <td><%=rs.getString(5)%></td>
-                    </tr>
-                    <%}
-                   	else{%>
                    	 <tr>
                       <td><a href=<%="Chart.jsp?hostname="+rs.getString(1)%>><%=rs.getString(1)%></td></a>
                      <td><%=rs.getString(2)%></td>
-                     <td><%=rs.getString(3)%></td>
-                     <td><%=rs.getInt(4)%></td>
-                     <td><%=rs.getString(5)%></td>
+                     
                     </tr>
-                   	<%}%>
-                  <%
+                   <%
                   } %>
                   
                 </table>
               </div>
             </div>
-            <div class="card-footer small text-muted">Updates every <%=refresh_time %> seconds</div>
+            <div class="card-footer small text-muted">Updates every <%=refresh_time%> seconds</div>
           </div>
 
           <!-- <p class="small text-center text-muted my-5">

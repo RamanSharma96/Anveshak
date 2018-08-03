@@ -10,7 +10,7 @@ public class GetConnection {
 		
 		try {
 		Class.forName("com.mysql.jdbc.Driver");
-	    con=DriverManager.getConnection("jdbc:mysql://localhost:3306/monitoringsystem?autoReconnect=true&useSSL=false", "root", "raman");
+	    con=DriverManager.getConnection("jdbc:mysql://localhost:3306/test?autoReconnect=true&useSSL=false", "root", "raman");
 		}
 		catch(Exception e) {e.printStackTrace();}
 		return con;
