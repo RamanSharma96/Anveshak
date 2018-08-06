@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Scan</title>
+    <title>Servers</title>
 
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -132,34 +132,14 @@
             <li class="breadcrumb-item">
               <a href="#">Home</a>
             </li>
-            <li class="breadcrumb-item active">Scan Network</li> 
+            <li class="breadcrumb-item active">Monitoring List </li> 
           </ol>
-			<form action="ScanProcess.jsp">
-			<input type="text" name="from_ip" placeholder="From ip">
-			<input type="text" name="to_ip" placeholder="To ip">
-			<b><input type="submit" style="color:blue" value="Start Scan"/></b> 
-			</form>
-			<br/>
-			<form action="ScanProcess.jsp">
-			<input type="text" name="from_ip" placeholder="FQDN">
-			<b><input type="submit" style="color:blue" value="Start Scan"/></b> 
-			</form>
-			<br/>
-			<form action="ScanProcess.jsp">
-			<input type="text" name="from_ip" placeholder="IP Address">
-			<b><input type="submit" style="color:blue" value="Start Scan"/></b> 
-			</form>
-			<br/>
-			<form action="ScanProcess.jsp">
-			<input type="text" name="from_ip" placeholder="Subnet ">
-			<b><input type="submit" style="color:blue" value="Start Scan"/></b> 
-			</form>
-			<br/> 
+			 
           <!-- DataTables Example -->
           <div class="card mb-3">
             <div class="card-header">
               <i class="fas fa-table"></i>
-               Hosts Found In Network</div>
+               Devices Being Monitored</div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -167,7 +147,7 @@
                     <tr>
                       <th>Hostname</th>
                       <th>IP Address</th>
-                      <th>Deploy Status</th> 
+                      <th>Alarms</th>
                     </tr>
                   </thead>
                   <%! ResultSet rs;
@@ -175,33 +155,16 @@
         		      static int cur_count=0;
         		      int refresh_time=30;
         		  %>
-                  <%
-                  rs=FetchDevices.fetchDevices();
-                  ResultSet rs2;
-                  String temp;
-                  boolean deployed=false;
+                  <% 
+                  rs=FetchDevices.fetchDevicesMonitoring();
+                  
                   response.setIntHeader("Refresh", refresh_time);
                   while(rs.next()){    	
-                	  temp=rs.getString(1);
                    	%>
                    	 <tr>
                       <td><a href=<%="Chart.jsp?hostname="+rs.getString(1)%>><%=rs.getString(1)%></td></a>
-                      <td><%=rs.getString(2)%></td>
-                      <%
-                          rs2=FetchDevices.fetchDevicesDeployed(temp);
-                      	  while(rs2.next()){
-                      		  deployed=true;
-                      %>
-                      <td><a style="color:green" href=<%="Deploy.jsp?hostname="+rs.getString(1)%>>Deployed</td></a>
-                      <%
-                      	  }
-                      	  if(!deployed)
-                      	  {
-                      %>
-                      <td><a style="color:red" href=<%="Deploy.jsp?hostname="+rs.getString(1)%>>Deploy</td></a>
-                      <%
-                      	  }
-                      %>
+                     <td><%=rs.getString(2)%></td>
+                     <td><a style="color:red" href=<%="Alarms.jsp?hostname="+rs.getString(1)%>>Alarm</td></a> 
                     </tr>
                    <%
                   } %>

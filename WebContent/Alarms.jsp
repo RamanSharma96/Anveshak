@@ -101,6 +101,11 @@
           </a>
         </li>
          <li class="nav-item active">
+          <a class="nav-link" href="Servers.jsp"> 
+            <i class="fas fa-fw fa-table"></i>
+            <span>Servers</span></a>
+        </li>
+         <li class="nav-item active">
           <a class="nav-link" href="register.html">
             <i class="fas fa-fw fa-table"></i>
             <span>Configure Thresholds</span></a>
@@ -154,8 +159,12 @@
                   <%
                   response.setIntHeader("Refresh", refresh_time);
                   int i=3;
-
-                  rs=FetchAlarms.fetchAlarms();
+				  if(request.getParameter("hostname")!=null)
+				  {
+				    rs=FetchAlarms.fetchAlarms(request.getParameter("hostname"));  
+				  }
+				  else
+                     rs=FetchAlarms.fetchAlarms();
                   cur_count=rs.getFetchSize();
                   boolean new_alarm=false;
                   if(cur_count>prev_count)

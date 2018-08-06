@@ -12,8 +12,14 @@ public class GetConnection {
 		Class.forName("com.mysql.jdbc.Driver");
 	    con=DriverManager.getConnection("jdbc:mysql://localhost:3306/test?autoReconnect=true&useSSL=false", "root", "raman");
 		}
-		catch(Exception e) {e.printStackTrace();}
+		catch(Exception e) {e.printStackTrace();} 
 		return con;
 	}
-
+public static void closeConnection() {
+		
+		try {
+			con.close();
+		}
+		catch(Exception e) {e.printStackTrace();} 
+	}
 }
