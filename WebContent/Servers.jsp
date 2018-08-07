@@ -1,4 +1,4 @@
-<%@ page language="java" import="DB.FetchDevices, java.sql.*" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" import="DB.FetchDevices, DB.FetchAlarms, DB.GetConnection, java.sql.*" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -134,7 +134,19 @@
             </li>
             <li class="breadcrumb-item active">Monitoring List </li> 
           </ol>
-			 
+			 <div style="background-color:#dcdcdc ;height:100px">
+			 	<table width="100%"">
+			 		<tr>
+			 		<th style="text-align:center;padding-top:20px ">Total No. Alarms</th>
+			 		<th style="text-align:center;padding-top:20px ">Total No. Devices Monitored </th>
+			 		</tr>
+			 		<tr>
+			 		 <td style="text-align:center;font-size:40px "><%=alarms_count %></td>
+			 		 <td style="text-align:center;font-size:40px "><%=devices_count %></td>
+			 		</tr>  
+			 	</table>
+			 </div>
+			 <br>  
           <!-- DataTables Example -->
           <div class="card mb-3">
             <div class="card-header">
@@ -154,17 +166,45 @@
         		  	  static int prev_count=-1;
         		      static int cur_count=0;
         		      int refresh_time=30;
+        		      static int alarms_count;
+        		      static int devices_count;
         		  %>
                   <% 
-                  rs=FetchDevices.fetchDevicesMonitoring();
                   
+                  Connection con;
+                  con=GetConnection.getConnection();
+                  PreparedStatement ps=con.prepareStatement("select count(*) from devices where os is not null");
+                  ResultSet rs=ps.executeQuery();
+                  while(rs.next())
+                  {
+                	  devices_count=rs.getInt(1);
+                  }
+                 
+                  ps=con.prepareStatement("select count(*) from alarms");
+                  rs=ps.executeQuery();
+                   while(rs.next())
+                  {
+                	  alarms_count=rs.getInt(1);
+                  }
+                  
+                  rs=FetchDevices.fetchDevicesMonitoring();
+                  ResultSet rs2;
+                  int alarm_count=0;
                   response.setIntHeader("Refresh", refresh_time);
-                  while(rs.next()){    	
+                  while(rs.next()){  
+                	  rs2=FetchAlarms.fetchAlarmCount(rs.getString(1));
+                	  while(rs2.next())
+                	  {
+                		  alarm_count=rs2.getInt(1);
+                	  }
                    	%>
                    	 <tr>
-                      <td><a href=<%="Chart.jsp?hostname="+rs.getString(1)%>><%=rs.getString(1)%></td></a>
+                      <td><a href=<%="Chart.jsp?hostname="+rs.getString(1)%> target="_blank"><%=rs.getString(1)%></td></a>
                      <td><%=rs.getString(2)%></td>
-                     <td><a style="color:red" href=<%="Alarms.jsp?hostname="+rs.getString(1)%>>Alarm</td></a> 
+                     <td>
+                     	<a style="color:red" href=<%="Alarms.jsp?hostname="+rs.getString(1)%>>Alarm(<%=alarm_count %>)</a>
+                     	&nbsp;&nbsp; <a style="color:orange" href=<%="PieChart.jsp?hostname="+rs.getString(1) %> target="_blank">Visualize </a>
+                     </td> 
                     </tr>
                    <%
                   } %>

@@ -5,11 +5,12 @@
 <%@ page import="java.sql.Statement"%>
 <%@ page import="java.sql.Connection"%>
 <%@ page import="DB.GetConnection"%>
+
 <html>
 <head>
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </head>
 <body>
@@ -71,7 +72,7 @@ var chartcpu = new CanvasJS.Chart("chart1", {
       label: "Normal",
       labelFontColor:"blue",
       thickness:3,
-      color:"#ffff00"
+      color:"red"
     },{value: 30,
       label: "Critical",
       labelFontColor:"blue",
@@ -98,7 +99,7 @@ var chartmem = new CanvasJS.Chart("chart2", {
       label: "Normal",
       labelFontColor:"blue",
       thickness:3,
-      color:"#ffff00"
+      color:"red"
     },{value: 30,
       label: "Critical",
       labelFontColor:"blue",
@@ -125,7 +126,7 @@ var chartdisk = new CanvasJS.Chart("chart3", {
       label: "Normal",
       labelFontColor:"blue",
       thickness:3,
-      color:"#ffff00"
+      color:"red"
     },{value: 30,
       label: "Critical",
       labelFontColor:"blue",
@@ -167,7 +168,7 @@ rs=ps.executeQuery();
 rs.next();
 for(int i=0;i<10;i++)
 {
-  b=b+Double.toString(rs.getFloat(1))+"a";
+  b=b+Double.toString(100- rs.getFloat(1))+"a";
   rs.next();
 } 
 ps=con.prepareStatement("select c.diskutil from devices d, disk_utilization c where d.hostname=? and d.deviceid=c.deviceid order by time desc limit 10");
@@ -176,7 +177,7 @@ rs=ps.executeQuery();
 rs.next();
 for(int i=0;i<10;i++)
 {
-  c=c+Double.toString(rs.getFloat(1))+"a";
+  c=c+Double.toString(512-rs.getFloat(1))+"a";
   rs.next();
 } 
 
@@ -184,14 +185,14 @@ ps=con.prepareStatement("select cputhreshold,diskthreshold,memorythreshold from 
 rs=ps.executeQuery();
 rs.next();
 cpun=(int)(rs.getFloat(1));
-diskn=(int)(rs.getFloat(2));
-memc=(int)(rs.getFloat(3));
+diskn=512-(int)(rs.getFloat(2));
+memc=100-(int)(rs.getFloat(3));
 
 }
        catch(Exception e){out.println(e);}    
 %>
-<div id="chart1" style="height: 360px; width: 100%;"></div>
-<div id="chart2" style="height: 360px; width: 100%;"></div>
+<div id="chart1" style="height: 360px; width: 100%;"></div><br><br>
+<div id="chart2" style="height: 360px; width: 100%;"></div><br><br>
 <div id="chart3" style="height: 360px; width: 100%;"></div>
 
 </body>
@@ -238,17 +239,19 @@ for (var i = 0; i < 10; i++) {
   });
 }
 var chartcpu = new CanvasJS.Chart("chart1", {
-  title: {
-    text: " Populating chart using array "
+  title: { 
+	
+    text: " CPU Utilization vs Time "
   },
   axisY: {
+	  maximum:100,
     title: "CPU Utilization",
     stripLines: [{
       value: <%=cpun%>,
-      label: "Normal",
+      label: "Threshold",
       labelFontColor:"blue",
       thickness:3,
-      color:"#ffff00"
+      color:"red"
     }]
   },
   data: [{
@@ -261,16 +264,18 @@ var chartcpu = new CanvasJS.Chart("chart1", {
 chartcpu.render();
 var chartmem = new CanvasJS.Chart("chart2", {
   title: {
-    text: " Populating chart using array "
+	
+    text: " Memory Utilization vs Time  "
   },
   axisY: {
+	  maximum:100,
     title: "Memory Utilization",
     stripLines: [{
-      value: <%=memn%>,
-      label: "Normal",
+      value: <%=memc%>,
+      label: "Threshold",
       labelFontColor:"blue",
       thickness:3,
-      color:"#ffff00"
+      color:"red"
     }]
   },
   data: [{
@@ -282,16 +287,17 @@ var chartmem = new CanvasJS.Chart("chart2", {
 chartmem.render();
 var chartdisk = new CanvasJS.Chart("chart3", {
   title: {
-    text: " Populating chart using array "
+    text: " Disk Utilization vs Time "
   },
   axisY: {
+	  maximum:512,
     title: "Disk Utilization",
     stripLines: [{
       value: <%=diskn%>,
-      label: "Normal",
+      label: "Threshold",
       labelFontColor:"blue",
       thickness:3,
-      color:"#ffff00"
+      color:"red"
     }]
   },
   data: [{

@@ -3,6 +3,7 @@ package DB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class FetchDevices {
@@ -49,4 +50,5 @@ public class FetchDevices {
 			catch(Exception e) {e.printStackTrace();}
 			return rs;
 	}
+	
 }

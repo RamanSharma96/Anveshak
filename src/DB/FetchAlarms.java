@@ -43,7 +43,22 @@ public class FetchAlarms {
 			PreparedStatement ps=con.prepareStatement("select hostname,ipaddress,time,errorid,alarmcause from alarms,devices where alarms.deviceid=devices.deviceid and hostname=? order by time desc");
 			ps.setString(1,hostname);
 			rs=ps.executeQuery();
-			GetConnection.closeConnection();
+			}
+			catch(Exception e) {e.printStackTrace();}
+			return rs;
+	}
+	public static ResultSet fetchAlarmCount(String hostname)
+	{
+		try {
+		    
+		    //Class.forName("com.mysql.jdbc.Driver");
+		    //con=DriverManager.getConnection("jdbc:mysql://localhost:3306/monitoringsystem", "root", "raman");
+		    con=GetConnection.getConnection();
+			if(con==null)
+				System.out.println("NO DB CONNECTION");
+			PreparedStatement ps=con.prepareStatement("select count(*) from alarms as a,devices as d where d.deviceid=a.deviceid and d.hostname=?");
+			ps.setString(1,hostname);
+			rs=ps.executeQuery();
 			}
 			catch(Exception e) {e.printStackTrace();}
 			return rs;

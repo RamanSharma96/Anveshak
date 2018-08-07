@@ -185,26 +185,14 @@
                 	  temp=rs.getString(1);
                    	%>
                    	 <tr>
-                      <td><a href=<%="Chart.jsp?hostname="+rs.getString(1)%>><%=rs.getString(1)%></td></a>
+                      <td><a href=<%="Chart.jsp?hostname="+rs.getString(1)%> target="_blank"><%=rs.getString(1)%></td></a>
                       <td><%=rs.getString(2)%></td>
-                      <%
-                          rs2=FetchDevices.fetchDevicesDeployed(temp);
-                      	  while(rs2.next()){
-                      		  deployed=true;
-                      %>
-                      <td><a style="color:green" href=<%="Deploy.jsp?hostname="+rs.getString(1)%>>Deployed</td></a>
-                      <%
-                      	  }
-                      	  if(!deployed)
-                      	  {
-                      %>
-                      <td><a style="color:red" href=<%="Deploy.jsp?hostname="+rs.getString(1)%>>Deploy</td></a>
-                      <%
-                      	  }
-                      %>
+                   	  <td><a style="color:red" href=<%="Deploy.jsp?hostname="+rs.getString(1)%>>Deploy</td></a>
                     </tr>
                    <%
-                  } %>
+                  } 
+                  	
+                  %>
                   
                 </table>
               </div>

@@ -175,7 +175,7 @@
                    	if(new_alarm){
                    	%>
                     <tr>
-                      <td><i style="color:red">(New)</i><a href=<%="Chart.jsp?hostname="+rs.getString(1)%>><%=rs.getString(1)%></td></a>
+                      <td><i style="color:red">(New)</i><a href=<%="Chart.jsp?hostname="+rs.getString(1)%> target="_blank"><%=rs.getString(1)%></td></a>
                      <td><%=rs.getString(2)%></td>
                      <td><%=rs.getString(3)%></td>
                      <td><%=rs.getInt(4)%></td>
@@ -184,7 +184,7 @@
                     <%}
                    	else{%>
                    	 <tr>
-                      <td><a href=<%="Chart.jsp?hostname="+rs.getString(1)%>><%=rs.getString(1)%></td></a>
+                      <td><a href=<%="Chart.jsp?hostname="+rs.getString(1)%> target="_blank"><%=rs.getString(1)%></td></a>
                      <td><%=rs.getString(2)%></td>
                      <td><%=rs.getString(3)%></td>
                      <td><%=rs.getInt(4)%></td>
@@ -192,7 +192,9 @@
                     </tr>
                    	<%}%>
                   <%
-                  } %>
+                  } 
+                  	
+                  %>
                   
                 </table>
               </div>
