@@ -107,7 +107,7 @@
             <span>Servers</span></a>
         </li>
          <li class="nav-item active">
-          <a class="nav-link" href="register.html">
+          <a class="nav-link" href="Thresholds.jsp">
             <i class="fas fa-fw fa-table"></i>
             <span>Configure Thresholds</span></a>
         </li>

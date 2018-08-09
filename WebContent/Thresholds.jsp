@@ -1,4 +1,4 @@
-<%@ page language="java" import="DB.FetchAlarms, java.sql.*" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" import="DB.FetchDevices, DB.FetchAlarms, DB.GetConnection, java.sql.*" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Alarms</title>
+    <title>Servers</title>
 
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -100,6 +100,7 @@
             <span>Alarms</span>
           </a>
         </li>
+         </li>
          <li class="nav-item active">
           <a class="nav-link" href="Servers.jsp"> 
             <i class="fas fa-fw fa-table"></i>
@@ -131,75 +132,56 @@
             <li class="breadcrumb-item">
               <a href="#">Home</a>
             </li>
-            <li class="breadcrumb-item active">Alarms</li>
+            <li class="breadcrumb-item active">Monitoring List </li> 
           </ol>
-
+			 
+			 <br>  
           <!-- DataTables Example -->
           <div class="card mb-3">
             <div class="card-header">
               <i class="fas fa-table"></i>
-               Alarms Table</div>
+               Devices Being Monitored</div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
                       <th>Hostname</th>
-                      <th>IP Address</th>
-                      <th>Time</th>
-                      <th>Alarm ID</th>
-                      <th>Alarm Cause</th>
+                      <th>CPU Threshold %</th>
+                      <th>Memory Threshold %</th>
+                      <th>Disk Threshold (in GB)</th>
                     </tr>
                   </thead>
                   <%! ResultSet rs;
         		  	  static int prev_count=-1;
         		      static int cur_count=0;
         		      int refresh_time=30;
+        		      static int alarms_count;
+        		      static int devices_count;
         		  %>
-                  <%
-                  response.setIntHeader("Refresh", refresh_time);
-                  int i=3;
-				  if(request.getParameter("hostname")!=null)
-				  {
-				    rs=FetchAlarms.fetchAlarms(request.getParameter("hostname"));  
-				  }
-				  else
-                     rs=FetchAlarms.fetchAlarms();
-                  cur_count=rs.getFetchSize();
-                  boolean new_alarm=false;
-                  if(cur_count>prev_count)
-                	  new_alarm=true;
-                  prev_count=cur_count;
+                  <% 
                   
-                  while(rs.next()){
-                   	if(new_alarm){
-                   	%>
-                    <tr>
-                      <td><i style="color:red">(New)</i><a href=<%="Chart.jsp?hostname="+rs.getString(1)%> target="_blank"><%=rs.getString(1)%></td></a>
-                     <td><%=rs.getString(2)%></td>
-                     <td><%=rs.getString(3)%></td>
-                     <td><%=rs.getInt(4)%></td>
-                     <td><%=rs.getString(5)%></td>
-                    </tr>
-                    <%}
-                   	else{%>
-                   	 <tr>
-                      <td><a href=<%="Chart.jsp?hostname="+rs.getString(1)%> target="_blank"><%=rs.getString(1)%></td></a>
-                     <td><%=rs.getString(2)%></td>
-                     <td><%=rs.getString(3)%></td>
-                     <td><%=rs.getInt(4)%></td>
-                     <td><%=rs.getString(5)%></td>
-                    </tr>
-                   	<%}%>
-                  <%
-                  } 
-                  	
-                  %>
+                  Connection con;
+                  con=GetConnection.getConnection();
+                  PreparedStatement ps=con.prepareStatement("select distinct hostname,cputhreshold,memorythreshold,diskthreshold  from devices where os is not null");
+                  ResultSet rs=ps.executeQuery(); 
+                  while(rs.next())
+                  {
+               %>
+               			<tr>
+               				<td><%=rs.getString(1) %></td>
+               				<td><%=rs.getFloat(2) %></td>
+               				<td><%=rs.getFloat(3) %></td>
+               				<td><%=rs.getFloat(4) %>  <a style="color:orange" href=<%="ThresholdsForm.jsp?hostname="+rs.getString(1) %>> UPDATE</td>
+               			</tr>
+               <% 
+                  }
+                %>  
                   
                 </table>
               </div>
             </div>
-            <div class="card-footer small text-muted">Updates every <%=refresh_time %> seconds</div>
+            <div class="card-footer small text-muted">Updates every <%=refresh_time%> seconds</div>
           </div>
 
           <!-- <p class="small text-center text-muted my-5">

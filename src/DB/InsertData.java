@@ -47,9 +47,10 @@ public class InsertData {
 		System.out.println(s+" ROWS inserted!!!!");
 			
 	    Thread.sleep(1000);
-	    ps=conn.prepareCall("call insertintodisk(?,?)");
+	    ps=conn.prepareCall("call insertintodisk(?,?,?)");
 		ps.setString(1,ip);
-		ps.setFloat(2, new Float(disk));
+		ps.setString(2,"Disk C");
+		ps.setFloat(3, new Float(disk));
 		s=ps.executeUpdate();
 		System.out.println(s+" ROWS inserted!!!!");
     

@@ -39,7 +39,8 @@ window.onload=  function() {
   var dataPointsMem = [];
   var dataPointsDisk = [];
     var i=10,j=0;
-  for(i=9;i>=0;i--)
+    console.log(arrc);
+  for(i=arrc.length-2;i>=arrc.length-11;i--)
   {
     ycpu[j]=parseInt(arrc[i]);
     ymem[j]=parseInt(arrm[i]);
@@ -143,6 +144,9 @@ var chartdisk = new CanvasJS.Chart("chart3", {
 
 
 chartdisk.render();
+for (var i = 0; i < 10; i++) {
+	 ycpu[i]=0;
+	} 
 }
 
 </script>
@@ -181,7 +185,8 @@ for(int i=0;i<10;i++)
   rs.next();
 } 
 
-ps=con.prepareStatement("select cputhreshold,diskthreshold,memorythreshold from devices");
+ps=con.prepareStatement("select cputhreshold,diskthreshold,memorythreshold from devices where hostname=?");
+ps.setString(1,request.getParameter("hostname"));
 rs=ps.executeQuery();
 rs.next();
 cpun=(int)(rs.getFloat(1));
